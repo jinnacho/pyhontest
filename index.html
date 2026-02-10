@@ -18,7 +18,6 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
-        /* 로딩 애니메이션 */
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
@@ -31,6 +30,11 @@
             vertical-align: middle;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #code-editor:focus {
+            outline: none;
+            background-color: #252525;
+        }
     </style>
 </head>
 <body class="text-slate-800">
@@ -47,8 +51,11 @@
                     <button onclick="switchTab('practice')" id="btn-practice" class="tab-btn py-5 px-1 font-medium text-slate-500 hover:text-blue-500">코딩 실습</button>
                     <button onclick="switchTab('assignment')" id="btn-assignment" class="tab-btn py-5 px-1 font-medium text-slate-500 hover:text-blue-500">과제 제출</button>
                 </div>
-                <div class="text-sm font-medium text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100">
-                    클라우드 연동 모드
+                <div class="flex items-center gap-3">
+                    <button onclick="copyShareLink()" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold transition">
+                        <i class="fa-solid fa-share-nodes"></i>
+                        <span>공유하기</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -56,39 +63,40 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- SECTION 1: Curriculum & Theory -->
+        <!-- SECTION 1: Curriculum -->
         <section id="tab-curriculum" class="tab-content space-y-8">
-            <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-xl">
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-xl">
                 <div class="flex">
-                    <div class="flex-shrink-0"><i class="fa-solid fa-triangle-exclamation text-orange-400"></i></div>
+                    <div class="flex-shrink-0"><i class="fa-solid fa-circle-info text-blue-400"></i></div>
                     <div class="ml-3">
-                        <p class="text-sm text-orange-700 font-bold">실시간 저장 알림:</p>
-                        <p class="text-sm text-orange-600">수정한 코드를 제출하면 선생님의 구글 스프레드시트에 자동으로 기록됩니다.</p>
+                        <p class="text-sm text-blue-700 font-bold">미션 안내:</p>
+                        <p class="text-sm text-blue-600">아래 카드 또는 왼쪽 메뉴에서 실습을 선택하세요. 기초부터 심화까지 총 13개의 미션이 준비되어 있습니다.</p>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 topic-card">
+                <!-- 주요 미션 미리보기 -->
+                <div onclick="loadExercise('vars')" class="cursor-pointer bg-white p-6 rounded-2xl shadow-sm border border-slate-100 topic-card">
                     <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4">
                         <i class="fa-solid fa-calculator"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">변수, 자료형, 연산</h3>
-                    <p class="text-sm text-slate-500">Casting 오류를 찾아 수정하세요.</p>
+                    <h3 class="font-bold text-lg mb-2">기초: 형 변환</h3>
+                    <p class="text-sm text-slate-500">데이터 타입의 이해와 변환법을 배웁니다.</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 topic-card">
-                    <div class="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fa-solid fa-table-cells"></i>
+                <div onclick="loadExercise('if_logic')" class="cursor-pointer bg-white p-6 rounded-2xl shadow-sm border border-slate-100 topic-card">
+                    <div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-code-branch"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">다차원 배열</h3>
-                    <p class="text-sm text-slate-500">인덱스 접근법 미션입니다.</p>
+                    <h3 class="font-bold text-lg mb-2">기초: 조건문</h3>
+                    <p class="text-sm text-slate-500">성적 판별기를 통해 if문을 익힙니다.</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 topic-card">
-                    <div class="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fa-solid fa-rotate"></i>
+                <div onclick="loadExercise('loop_sum')" class="cursor-pointer bg-white p-6 rounded-2xl shadow-sm border border-slate-100 topic-card">
+                    <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-sigma"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">중첩 제어문</h3>
-                    <p class="text-sm text-slate-500">반복문 빈칸을 채우세요.</p>
+                    <h3 class="font-bold text-lg mb-2">중급: 반복문 합계</h3>
+                    <p class="text-sm text-slate-500">1부터 N까지의 합을 구하는 로직을 작성합니다.</p>
                 </div>
             </div>
         </section>
@@ -97,12 +105,23 @@
         <section id="tab-practice" class="tab-content hidden space-y-6">
             <div class="flex flex-col lg:flex-row gap-6">
                 <div class="w-full lg:w-1/4 space-y-4">
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                        <h4 class="font-bold text-slate-400 text-xs mb-4 uppercase">실습 예제</h4>
-                        <div class="space-y-2">
-                            <button onclick="loadExercise('vars')" class="w-full text-left px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-50">변수와 형 변환</button>
-                            <button onclick="loadExercise('matrix')" class="w-full text-left px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-50">다차원 배열</button>
-                            <button onclick="loadExercise('loop')" class="w-full text-left px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-50">중첩 반복문</button>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 max-h-[700px] overflow-y-auto">
+                        <h4 class="font-bold text-slate-400 text-xs mb-4 uppercase sticky top-0 bg-white py-2">실습 미션 리스트 (13)</h4>
+                        <div class="space-y-1">
+                            <button id="btn-ex-vars" onclick="loadExercise('vars')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">1. 형 변환 오류</button>
+                            <button id="btn-ex-matrix" onclick="loadExercise('matrix')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">2. 리스트 인덱싱</button>
+                            <button id="btn-ex-loop" onclick="loadExercise('loop')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">3. 구구단 빈칸</button>
+                            <div class="h-px bg-slate-100 my-2"></div>
+                            <button id="btn-ex-if_logic" onclick="loadExercise('if_logic')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">4. 성적 등급 계산</button>
+                            <button id="btn-ex-loop_sum" onclick="loadExercise('loop_sum')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">5. 누적 합계 구하기</button>
+                            <button id="btn-ex-list_append" onclick="loadExercise('list_append')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">6. 리스트 요소 추가</button>
+                            <button id="btn-ex-string_slice" onclick="loadExercise('string_slice')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">7. 문자열 슬라이싱</button>
+                            <button id="btn-ex-dict_basic" onclick="loadExercise('dict_basic')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">8. 딕셔너리 정보 찾기</button>
+                            <button id="btn-ex-func_sum" onclick="loadExercise('func_sum')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">9. 함수 정의하기</button>
+                            <button id="btn-ex-even_filter" onclick="loadExercise('even_filter')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">10. 짝수 판별 루프</button>
+                            <button id="btn-ex-list_len" onclick="loadExercise('list_len')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">11. 리스트 길이와 평균</button>
+                            <button id="btn-ex-search_val" onclick="loadExercise('search_val')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">12. 리스트 검색</button>
+                            <button id="btn-ex-star_pyramid" onclick="loadExercise('star_pyramid')" class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-slate-50">13. 별 찍기 (피라미드)</button>
                         </div>
                     </div>
                 </div>
@@ -110,15 +129,21 @@
                 <div class="w-full lg:w-3/4 space-y-4">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                         <div class="bg-slate-900 px-6 py-4 flex justify-between items-center">
-                            <span id="current-filename" class="text-sm text-blue-400 code-font font-bold">practice.py</span>
-                            <button onclick="runCodeSim()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-1.5 rounded-full text-sm font-bold">RUN CODE</button>
-                        </div>
-                        <div class="flex flex-col md:flex-row h-[450px]">
-                            <div class="w-full md:w-1/2 p-0 overflow-auto bg-[#1e1e1e]">
-                                <pre class="p-6 text-slate-300 code-font text-sm outline-none" id="code-editor" contenteditable="true" spellcheck="false"># 코드를 입력하세요</pre>
+                            <div class="flex items-center gap-3">
+                                <span id="current-filename" class="text-sm text-slate-400 code-font">practice.py</span>
                             </div>
-                            <div class="w-full md:w-1/2 bg-black p-6 text-green-400 code-font text-xs overflow-auto" id="output-screen">
-> 코드를 실행하면 결과가 여기에 나타납니다.
+                            <button onclick="runCodeSim()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 transition">
+                                <i class="fa-solid fa-play text-[10px]"></i>
+                                <span>RUN CODE</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-col md:flex-row h-[500px]">
+                            <div class="w-full md:w-1/2 p-0 overflow-auto bg-[#1e1e1e]">
+                                <pre class="p-6 text-slate-300 code-font text-sm leading-relaxed min-h-full" id="code-editor" contenteditable="true" spellcheck="false"></pre>
+                            </div>
+                            <div class="w-full md:w-1/2 bg-black p-6 flex flex-col border-l border-slate-800">
+                                <div id="output-screen" class="flex-grow code-font text-xs overflow-auto whitespace-pre-wrap leading-relaxed text-green-400">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -129,16 +154,16 @@
         <!-- SECTION 3: Assignment -->
         <section id="tab-assignment" class="tab-content hidden">
             <div class="max-w-4xl mx-auto bg-white p-10 rounded-3xl shadow-sm border border-slate-100">
-                <h2 class="text-2xl font-bold mb-6">최종 코드 제출 (Google 시트 연동)</h2>
+                <h2 class="text-2xl font-bold mb-6 text-slate-900">최종 코드 제출</h2>
                 <form id="submission-form" class="space-y-6">
                     <div class="grid grid-cols-2 gap-4">
-                        <input type="text" id="student-id" placeholder="학번 (예: 30101)" class="bg-slate-50 rounded-xl p-3 outline-none focus:ring-2 focus:ring-blue-500">
-                        <input type="text" id="student-name" placeholder="이름" class="bg-slate-50 rounded-xl p-3 outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="student-id" placeholder="학번" class="bg-slate-50 rounded-xl p-4 outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="student-name" placeholder="이름" class="bg-slate-50 rounded-xl p-4 outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-                    <textarea id="submission-code" rows="10" class="w-full bg-slate-900 text-blue-300 rounded-xl p-4 code-font text-sm" placeholder="# 수정한 최종 코드를 붙여넣으세요..."></textarea>
+                    <textarea id="submission-code" rows="10" class="w-full bg-slate-900 text-blue-300 rounded-xl p-4 code-font text-sm" placeholder="# 이곳에 제출할 최종 완성 코드를 입력하세요."></textarea>
                     
                     <button type="button" id="submit-btn" onclick="submitAssignment()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold hover:bg-slate-800 transition flex justify-center items-center">
-                        <span id="btn-text">과제 제출하기</span>
+                        <span id="btn-text">구글 시트에 제출하기</span>
                     </button>
                 </form>
             </div>
@@ -146,24 +171,75 @@
 
     </main>
 
+    <input type="text" id="share-link-input" class="fixed -top-full left-0 opacity-0" readonly>
+
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-4 rounded-2xl shadow-2xl transform translate-y-32 transition-all duration-500 flex items-center gap-4 z-[100]">
-        <div id="toast-icon-bg" class="w-8 h-8 rounded-full flex items-center justify-center">
-            <i id="toast-icon" class="fa-solid fa-check"></i>
+        <div id="toast-icon-bg" class="w-8 h-8 rounded-full flex items-center justify-center bg-blue-500">
+            <i id="toast-icon" class="fa-solid fa-info"></i>
         </div>
         <div>
             <div id="toast-title" class="font-bold text-sm">알림</div>
-            <div id="toast-message" class="text-xs text-slate-400">내용이 처리되었습니다.</div>
+            <div id="toast-message" class="text-xs text-slate-400">메시지 내용</div>
         </div>
     </div>
 
     <script>
-        // 중요: 배포한 Google Apps Script 웹 앱 URL을 여기에 넣으세요!
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzGgXQ2dmkD22r0biuSQZa1sZ8wt1VBoOoYdaqdbgs6HmqlsKHcVhc1ujFqy2WxC1TO/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyMLRVmoQdEAnXmZK9eAz5THUs_WgZr8dHzrBMpTTrZUpfhqR4eFITVWZc3TQ6-teFY/exec';
+        let currentExerciseKey = '';
 
         const exercises = {
-            vars: { name: 'casting_error.py', code: 'num = input("숫자 입력: ")\n# 에러를 수정하세요\nprint(num + 10)' },
-            matrix: { name: 'matrix_blank.py', code: 'data = [["서울", 10], ["부산", 20]]\nprint(data[____][0])' },
-            loop: { name: 'loop_blank.py', code: 'for i in range(2, 4):\n    for j in range(1, 10)____\n        print(f"{i} x {j} = {____}")' }
+            vars: { 
+                name: 'casting_error.py', 
+                code: '# 1. 입력받은 숫자에 10을 더해 출력하세요.\nnum = input("숫자를 입력하세요: ")\n\n# 아래 줄을 수정하세요\nresult = num + 10\n\nprint("결과:", result)' 
+            },
+            matrix: { 
+                name: 'matrix_indexing.py', 
+                code: '# 2. 리스트에서 "서울"을 출력하세요.\ndata = [["서울", 10], ["부산", 20]]\n\n# ____를 숫자로 채우세요.\nprint("수도:", data[____][____])' 
+            },
+            loop: { 
+                name: 'gugudan.py', 
+                code: '# 3. 구구단 2단을 완성하세요.\nfor i in range(1, 10)____\n    print(f"2 x {i} = {____}")' 
+            },
+            if_logic: {
+                name: 'grading.py',
+                code: '# 4. 점수가 90점 이상이면 "A"를 출력하세요.\nscore = 95\nif score ____ 90:\n    print("A")\nelse:\n    print("B")'
+            },
+            loop_sum: {
+                name: 'sum_to_n.py',
+                code: '# 5. 1부터 10까지의 합계를 구하세요.\ntotal = 0\nfor i in range(1, ____):\n    total = total + i\nprint(total)'
+            },
+            list_append: {
+                name: 'list_op.py',
+                code: '# 6. colors 리스트에 "blue"를 추가하세요.\ncolors = ["red", "green"]\n# ____를 메서드로 채우세요.\ncolors.____("blue")\nprint(colors)'
+            },
+            string_slice: {
+                name: 'slicing.py',
+                code: '# 7. "Hello World"에서 "Hello"만 추출하세요.\ntext = "Hello World"\n# ____를 슬라이싱 범위로 채우세요.\nprint(text[____])'
+            },
+            dict_basic: {
+                name: 'dictionary.py',
+                code: '# 8. 딕셔너리에서 나이(age)를 출력하세요.\nuser = {"name": "Alice", "age": 25}\nprint(user[____])'
+            },
+            func_sum: {
+                name: 'function.py',
+                code: '# 9. 두 수를 더해 반환하는 함수를 완성하세요.\ndef add(a, b):\n    ____ a + b\n\nprint(add(10, 20))'
+            },
+            even_filter: {
+                name: 'even_check.py',
+                code: '# 10. i가 짝수일 때만 출력하도록 만드세요.\nfor i in range(1, 6):\n    if i % 2 ____ 0:\n        print(i)'
+            },
+            list_len: {
+                name: 'average.py',
+                code: '# 11. 리스트의 길이를 구해 평균을 계산하세요.\nnums = [10, 20, 30]\navg = sum(nums) / ____(nums)\nprint(avg)'
+            },
+            search_val: {
+                name: 'searching.py',
+                code: '# 12. "apple"이 리스트에 있는지 확인하세요.\nfruits = ["banana", "apple", "cherry"]\nif "apple" ____ fruits:\n    print("Found!")'
+            },
+            star_pyramid: {
+                name: 'stars.py',
+                code: '# 13. 별을 1개부터 3개까지 늘려가며 출력하세요.\nfor i in range(1, 4):\n    print("*" ____ i)'
+            }
         };
 
         function switchTab(tabId) {
@@ -174,19 +250,46 @@
         }
 
         function loadExercise(key) {
+            currentExerciseKey = key;
             const ex = exercises[key];
             document.getElementById('current-filename').innerText = ex.name;
             document.getElementById('code-editor').innerText = ex.code;
+            
+            document.querySelectorAll('[id^="btn-ex-"]').forEach(btn => btn.classList.remove('bg-blue-50', 'text-blue-600', 'font-bold'));
+            const activeBtn = document.getElementById('btn-ex-' + key);
+            if(activeBtn) activeBtn.classList.add('bg-blue-50', 'text-blue-600', 'font-bold');
+            
             switchTab('practice');
+            document.getElementById('output-screen').innerHTML = `> ${ex.name} 준비됨.`;
         }
 
         function runCodeSim() {
             const output = document.getElementById('output-screen');
             const code = document.getElementById('code-editor').innerText;
-            output.innerHTML = "> 분석 중...\n";
+            output.innerHTML = "$ python3 " + exercises[currentExerciseKey].name + "\n";
+            
             setTimeout(() => {
-                if(code.includes('____')) output.innerHTML += "오류: 빈칸이 있습니다.";
-                else output.innerHTML += "실행 성공! 결과를 확인하고 제출 탭으로 이동하세요.";
+                let success = false;
+                let msg = "";
+
+                // 간단한 분석 로직
+                switch(currentExerciseKey) {
+                    case 'vars': success = code.includes('int('); msg = success ? "결과: 15\n[성공] 문자열을 정수로 변환했습니다." : "TypeError: can only concatenate str to str"; break;
+                    case 'matrix': success = code.includes('0][0'); msg = success ? "수도: 서울\n[성공] 인덱스 접근 완료." : "인덱스가 틀렸거나 빈칸입니다."; break;
+                    case 'loop': success = code.includes(':') && (code.includes('2*i') || code.includes('2 * i')); msg = success ? "2 x 1 = 2\n...\n2 x 9 = 18\n[성공]" : "문법 오류 또는 계산식 확인 필요"; break;
+                    case 'if_logic': success = code.includes('>='); msg = success ? "A\n[성공]" : "비교 연산자를 확인하세요."; break;
+                    case 'loop_sum': success = code.includes('11'); msg = success ? "55\n[성공]" : "범위(range)를 확인하세요 (10까지 포함)."; break;
+                    case 'list_append': success = code.includes('append'); msg = success ? "['red', 'green', 'blue']\n[성공]" : "리스트 추가 메서드를 사용하세요."; break;
+                    case 'string_slice': success = code.includes('0:5') || code.includes(':5'); msg = success ? "Hello\n[성공]" : "슬라이싱 범위를 확인하세요."; break;
+                    case 'dict_basic': success = code.includes('"age"') || code.includes("'age'"); msg = success ? "25\n[성공]" : "키 값을 확인하세요."; break;
+                    case 'func_sum': success = code.includes('return'); msg = success ? "30\n[성공]" : "결과를 '반환'해야 합니다."; break;
+                    case 'even_filter': success = code.includes('=='); msg = success ? "2\n4\n[성공]" : "비교 연산자(==)를 사용하세요."; break;
+                    case 'list_len': success = code.includes('len'); msg = success ? "20.0\n[성공]" : "len() 함수를 사용하세요."; break;
+                    case 'search_val': success = code.includes(' in '); msg = success ? "Found!\n[성공]" : "멤버 연산자(in)를 사용하세요."; break;
+                    case 'star_pyramid': success = code.includes('*'); msg = success ? "*\n**\n***\n[성공]" : "문자열 반복 연산자를 확인하세요."; break;
+                }
+
+                output.innerHTML += success ? `<span class='text-green-400'>${msg}</span>` : `<span class='text-red-400'>${msg}</span>`;
             }, 500);
         }
 
@@ -194,58 +297,44 @@
             const studentId = document.getElementById('student-id').value;
             const name = document.getElementById('student-name').value;
             const code = document.getElementById('submission-code').value;
+            if (!studentId || !name || !code) { showToast("모두 입력해주세요.", "error"); return; }
+            
             const btn = document.getElementById('submit-btn');
-            const btnText = document.getElementById('btn-text');
-
-            if (!studentId || !name || !code) {
-                showToast("모든 항목을 입력해 주세요.", "error");
-                return;
-            }
-
-            if (scriptURL.includes('YOUR_GOOGLE_SCRIPT')) {
-                showToast("선생님 설정: Script URL이 설정되지 않았습니다.", "error");
-                return;
-            }
-
-            // 제출 대기 상태 표시
             btn.disabled = true;
-            btnText.innerHTML = '<span class="loader"></span> 제출 중...';
-
-            const payload = {
-                studentId: studentId,
-                name: name,
-                code: code
-            };
+            document.getElementById('btn-text').innerText = "전송 중...";
 
             try {
-                // Google Apps Script는 CORS 이슈로 인해 fetch 시 no-cors 모드가 필요할 수 있으나, 
-                // JSON 전송을 위해 아래 방식을 주로 사용합니다.
                 await fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Apps Script 리다이렉션 특성상 no-cors가 안정적입니다.
+                    method: 'POST', mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ studentId, name, code })
                 });
-
-                showToast("성공적으로 구글 시트에 저장되었습니다!", "success");
+                showToast("제출 완료!", "success");
                 document.getElementById('submission-form').reset();
-            } catch (error) {
-                console.error('Error!', error.message);
-                showToast("제출 실패: 네트워크를 확인하세요.", "error");
+            } catch (e) {
+                showToast("오류 발생", "error");
             } finally {
                 btn.disabled = false;
-                btnText.innerHTML = '과제 최종 제출하기';
+                document.getElementById('btn-text').innerText = "구글 시트에 제출하기";
             }
+        }
+
+        function copyShareLink() {
+            const shareInput = document.getElementById('share-link-input');
+            shareInput.value = window.location.href;
+            shareInput.select();
+            document.execCommand('copy');
+            showToast("링크가 복사되었습니다!", "success");
         }
 
         function showToast(message, type) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = message;
-            const bg = document.getElementById('toast-icon-bg');
-            bg.className = type === 'success' ? "w-8 h-8 rounded-full flex items-center justify-center bg-green-500" : "w-8 h-8 rounded-full flex items-center justify-center bg-red-500";
             toast.classList.remove('translate-y-32');
             setTimeout(() => { toast.classList.add('translate-y-32'); }, 3000);
         }
+
+        window.onload = () => { loadExercise('vars'); };
     </script>
 </body>
 </html>
